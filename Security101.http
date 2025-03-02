@@ -1,0 +1,6 @@
+@Security101_HostAddress = http://localhost:5196
+
+GET {{Security101_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
