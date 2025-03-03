@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ToDoItemContext>();
 builder.Services.AddDbContext<ApplicationContext>();
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(opts => {
+    opts.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+});
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationContext>();
@@ -53,13 +56,22 @@ app.MapGet("/api/todoitems", async (ToDoItemContext db) => {
 })
 .WithName("GetToDoItems")
 .WithOpenApi()
-.RequireAuthorization();
+.RequireAuthorization("AdminOnly");
 
 app.MapGet("/api/todoitems/{id}", async (long id, ToDoItemContext db) => {
+    // SMELL: you should not be able to get an item you don't have permission for
     var item = await db.ToDoItems.FindAsync(id);
     return item is not null ? Results.Ok(item) : Results.NotFound();
 })
 .WithName("GetToDoItem")
+.WithOpenApi()
+.RequireAuthorization();
+
+app.MapGet("/api/todoitems/authoredBy/{name}", async (string name, ToDoItemContext db) => {
+    var query = db.Database.SqlQueryRaw<int>($"SELECT [Id] FROM ToDoItems WHERE AuthoredBy = '{name}'");
+    return await query.ToListAsync();
+})
+.WithName("GetToDoItemsByAuthor")
 .WithOpenApi()
 .RequireAuthorization();
 
