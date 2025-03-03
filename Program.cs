@@ -63,7 +63,8 @@ app.MapGet("/api/todoitems/{id}", async (long id, ToDoItemContext db) => {
 .WithOpenApi()
 .RequireAuthorization();
 
-app.MapPost("/api/todoitems", async (TodoItem todoItem, ToDoItemContext db) => {
+app.MapPost("/api/todoitems", async (TodoItem todoItem, ToDoItemContext db, HttpContext httpContext) => {
+    todoItem.AuthoredBy = httpContext.User.Identity?.Name;
     db.ToDoItems.Add(todoItem);
     await db.SaveChangesAsync();
 

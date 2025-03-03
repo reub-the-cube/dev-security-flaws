@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+using System.Net.NetworkInformation;
 
 namespace Security101.Models
 {
     public class ApplicationContext : IdentityDbContext<IdentityUser>
     {
+        private const string AdminPassword = "Password1!";
+
         public string DbPath { get; }
 
         public ApplicationContext()
@@ -25,29 +27,42 @@ namespace Security101.Models
 
         public static async Task SeedDataAsync(IServiceProvider serviceProvider)
         {
-            var _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            if (_roleManager != null)
+            await SeedRoleAsync(serviceProvider.GetRequiredService<RoleManager<IdentityRole>>(), "Admin");
+            await SeedUserAsync(serviceProvider.GetRequiredService<UserManager<IdentityUser>>(), "admin", "admin@security-flaws.com");
+            await SeedUserRoleAsync(serviceProvider.GetRequiredService<UserManager<IdentityUser>>(), "admin", "Admin");
+        }
+
+        private static async Task SeedRoleAsync(RoleManager<IdentityRole> roleManager, string name)
+        {
+            if (roleManager != null)
             {
-                IdentityRole? role = await _roleManager.FindByNameAsync("Admin");
+                IdentityRole? role = await roleManager.FindByNameAsync(name);
                 if (role == null)
                 {
-                    _ = await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                    await roleManager.CreateAsync(new IdentityRole(name));
                 }
             }
+        }
 
-            var _userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            
-            if (_userManager != null)
+        private static async Task SeedUserAsync(UserManager<IdentityUser> userManager, string name, string email)
+        {
+            if (userManager != null)
             {
-                IdentityUser? user = await _userManager.FindByNameAsync("admin");
+                IdentityUser? user = await userManager.FindByNameAsync(name);
                 if (user == null)
                 {
-                    var identityUser = new IdentityUser("admin") { Email = "admin@security-flaws.com" };
-                    _ = await _userManager.CreateAsync(identityUser, "Password1!");
-                    user = await _userManager.FindByNameAsync("admin");
+                    var identityUser = new IdentityUser(name) { Email = email };
+                    await userManager.CreateAsync(identityUser, AdminPassword);
                 }
+            }
+        }
 
-                if (user != null) await _userManager.AddToRoleAsync(user, "Admin");
+        private static async Task SeedUserRoleAsync(UserManager<IdentityUser> userManager, string name, string role)
+        {
+            if (userManager != null)
+            {
+                IdentityUser? user = await userManager.FindByNameAsync(name);
+                if (user != null) await userManager.AddToRoleAsync(user, role);
             }
         }
     }
