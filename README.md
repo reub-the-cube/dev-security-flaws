@@ -11,3 +11,5 @@ Set up the database.
 Run with
 
 `dotnet run`
+
+Visit: http://localhost:5196/swagger/index.html
