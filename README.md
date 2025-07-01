@@ -1,4 +1,4 @@
-Install Dotnet Enfity Framework Tool
+Install Dotnet Entity Framework Tool
 
 `dotnet tool update --global dotnet-ef `
 
