@@ -1,8 +1,8 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security101", "Security101.csproj", "{FCE3F43A-C858-9722-9C97-E8C2FAC0AE72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security101", "Security101\Security101.csproj", "{96338B90-245A-4F6A-A29E-B95D22A9E881}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,10 +10,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FCE3F43A-C858-9722-9C97-E8C2FAC0AE72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FCE3F43A-C858-9722-9C97-E8C2FAC0AE72}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FCE3F43A-C858-9722-9C97-E8C2FAC0AE72}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FCE3F43A-C858-9722-9C97-E8C2FAC0AE72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96338B90-245A-4F6A-A29E-B95D22A9E881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96338B90-245A-4F6A-A29E-B95D22A9E881}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96338B90-245A-4F6A-A29E-B95D22A9E881}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96338B90-245A-4F6A-A29E-B95D22A9E881}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
