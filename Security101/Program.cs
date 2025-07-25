@@ -11,7 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ToDoItemContext>();
+builder.Services.AddDbContext<ToDoItemContext>(options =>
+{
+    var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+    options.UseSqlite($"Data Source={Path.Join(path, "todoitem.db")}");
+});
 builder.Services.AddDbContext<ApplicationContext>();
 
 builder.Services.AddAuthorizationBuilder()
@@ -22,7 +26,8 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope()) {
+using (var scope = app.Services.CreateScope())
+{
     await ApplicationContext.SeedDataAsync(scope.ServiceProvider);
 }
 
@@ -53,3 +58,6 @@ app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager,
 ToDoEndpoints.Map(app);
 
 app.Run();
+
+public partial class Program
+{ }
