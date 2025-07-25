@@ -1,11 +1,5 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Security101.Models;
 using System.Net;
-using System.Net.Http.Headers;
 
 namespace Security101.Tests;
 
@@ -17,10 +11,8 @@ public class AuthenticatedUserTests : IClassFixture<TestWebApplicationFactory<Pr
 
     public AuthenticatedUserTests(TestWebApplicationFactory<Program> factory)
     {
-        _factory = factory.WithAuthentication();
+        _factory = factory.WithAuthentication<TestUserAuthHandler>();
         _httpClient = _factory.CreateClient();
-        _httpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue(scheme: "TestScheme");
 
         TestData.AddSeededData(_factory.Services);
     }

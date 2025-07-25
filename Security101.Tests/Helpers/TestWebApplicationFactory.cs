@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Security101.Models;
 
 namespace Security101.Tests;
@@ -34,15 +36,15 @@ public class TestWebApplicationFactory<TProgram>
         return base.CreateHost(builder);
     }
 
-    public WebApplicationFactory<TProgram> WithAuthentication()
+    public WebApplicationFactory<TProgram> WithAuthentication<T>() where T : AuthenticationHandler<AuthenticationSchemeOptions>
     {
         return WithWebHostBuilder(builder =>
         {
-            builder.ConfigureTestServices(services =>
-            {
-                services.AddAuthentication(defaultScheme: "TestScheme")
-                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
-                        "TestScheme", options => { });
+        builder.ConfigureTestServices(services =>
+        {
+            services.AddAuthentication(defaultScheme: "DefaultScheme")
+                .AddScheme<AuthenticationSchemeOptions, T>(
+                    "DefaultScheme", options => { });        
             });
         });
     }

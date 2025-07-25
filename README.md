@@ -10,6 +10,10 @@ Set up the database.
 
 Run with
 
-`dotnet run`
+`dotnet run --project ./Security101/Security101.csproj`
 
 Visit: http://localhost:5196/swagger/index.html
+
+Test with
+
+`dotnet test`
