@@ -35,8 +35,9 @@ public class TestAdminAuthHandler(IOptionsMonitor<AuthenticationSchemeOptions> o
 public abstract class BaseAuthHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
     ILoggerFactory logger, UrlEncoder encoder) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
 {
-    protected static AuthenticateResult CreateSuccessfulAuthenticationResult(IEnumerable<Claim>? claims)
+    protected static AuthenticateResult CreateSuccessfulAuthenticationResult(IEnumerable<Claim> claims)
     {
+        claims = claims.Append(new Claim(ClaimTypes.Name, TestData.TEST_USER_NAME));
         var identity = new ClaimsIdentity(claims, "Test");
         var principal = new ClaimsPrincipal(identity);
         var ticket = new AuthenticationTicket(principal, "AdminScheme");

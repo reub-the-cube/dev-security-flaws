@@ -19,7 +19,7 @@ public class AuthenticatedUserTests : IClassFixture<TestWebApplicationFactory<Pr
 
     public void Dispose()
     {
-        TestData.RemoveSeededData(_factory.Services);
+        TestData.RemoveToDoItems(_factory.Services);
     }
 
     [Fact]

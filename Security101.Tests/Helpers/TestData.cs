@@ -6,6 +6,8 @@ namespace Security101.Tests;
 
 public class TestData
 {
+    internal const string TEST_USER_NAME = "test-client";
+    
     private static bool _hasBeenMigrated = false;
 
     private static void Migrate(ToDoItemContext db)
@@ -26,13 +28,13 @@ public class TestData
         db.SaveChanges();
     }
 
-    public static void RemoveSeededData(IServiceProvider services)
+    public static void RemoveToDoItems(IServiceProvider services)
     {
         using var scope = services.CreateScope();
         var scopedServices = scope.ServiceProvider;
         var db = scopedServices.GetRequiredService<ToDoItemContext>();
 
-        db.ToDoItems.RemoveRange(GetSeedingToDoItems());
+        db.ToDoItems.RemoveRange(db.ToDoItems);
         db.SaveChanges();
     }
 
@@ -45,7 +47,9 @@ public class TestData
     {
         return
         [
-            new (){ Id = 1, Name = "Remember something", AuthoredBy = "test-client", IsComplete = false }
+            new (){ Id = 1, Name = "Remember something", AuthoredBy = TEST_USER_NAME, IsComplete = false },
+            new (){ Id = 2, Name = "Remember something else", AuthoredBy = TEST_USER_NAME, IsComplete = false },
+            new (){ Id = 3, Name = "Do a nice deed for somebody", AuthoredBy = TEST_USER_NAME, IsComplete = false },
         ];
     }
 }
